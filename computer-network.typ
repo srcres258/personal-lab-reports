@@ -644,18 +644,30 @@
   == 三. 三层交换机VLAN配置
 
   + VLAN配置如图所示。
+  
+    #img(src: "pic/20260509-21:27:35.png")
 
   + 根据实验手册中所提供的示意图，分别为PC0、PC1、PC2、PC3设置IP地址，如下图所示。
 
     - PC0设置IP地址
+    
+      #img(src: "pic/20260509-21:31:12.png")
 
     - PC1设置IP地址
+    
+      #img(src: "pic/20260509-21:32:30.png")
 
     - PC2设置IP地址
+    
+      #img(src: "pic/20260509-21:33:17.png")
 
     - PC3设置IP地址
+    
+      #img(src: "pic/20260509-21:33:36.png")
 
   + 查看交换机VLAN划分情况`Switch#show vlan`。
+  
+    #img(src: "pic/20260509-21:38:11.png")
 
   + 创建VLAN
 
@@ -666,10 +678,16 @@
   + 为指定的VLAN增加以太网端口。
 
     - 为VLAN2增加端口（1）
+    
+      #img(src: "pic/image0.png")
 
     - 为VLAN2增加端口（2）
+    
+      #img(src: "pic/image1.png")
 
   + 增加端口后查看VLAN的配置，发现Fa0/1与Fa0/2已成功加入VLAN2。
+  
+    #img(src: "pic/image2.png")
 
   + 创建VLAN接口以及配置VLAN接口的IP地址。
 
@@ -684,18 +702,24 @@
     `Switch(config-if)#end`
 
     - 配置VLAN接口的IP地址
+    
+      #img(src: "pic/image3.png")
 
   + 成功配置好VLAN接口的IP地址后再次查看交换机VLAN划分情况。
 
     此步骤选用`Switch#show run`指令查看VLAN2接口的IP地址是否配置成功
 
     - 成功为VLAN2配置IP地址
+    
+      #img(src: "pic/image4.png")
 
   + 删除VLAN2及其接口。
 
     `Switch(config)#no int vlan 2  //首先删除VALN接口`
 
     `Switch(config)#no vlan 2   //删除VLAN`
+    
+    #img(src: "pic/image5.png")
 ]
 
 #experiment(title: "实验1-4 协议分析--ARP协议")[
@@ -713,38 +737,60 @@
   == 三. Wireshark的使用
 
   + 打开终端输入`wireshark`来启动Wireshark。
+  
+    #img(src: "pic/image6.png")
 
   + 在界面顶部的网卡选项菜单中选择用户自己的网卡。
+  
+    #img(src: "pic/image7.png")
 
   + 启动桌面的chrome浏览器。
 
   + 开始分组捕获。点击工具栏中的“捕获”按钮，开始分组捕获。
+  
+    #img(src: "pic/image8.png")
 
   + 在运行分组捕获的同时，在浏览器地址栏中输入南京师范大学的网址：`http://www.nnu.edu.cn/`。
 
   + 当完整的页面加载完成后，单击捕获对话框中的“停止捕获”按钮，停止分组捕获。此时，Wireshark主窗口显示已捕获的本次通信的所有协议报文。
 
   + 在协议筛选框中输入`http`，按回车键，分组列表窗口中将只显示HTTP报文。
+  
+    #img(src: "pic/image9.png")
 
   + 滑动窗口找到带有`GET/HTTP/1.1`的行，该行的底部显示着`www.nnu.edu.cn`。
 
   + 选择该行。
+  
+    #img(src: "pic/image10.png")
 
   + 查看该数据包中的内容，点击`Destination`行，我们可以看到接收方的MAC地址，为`4e b5 cb 0c d2 25（48位）`
 
+    #img(src: "pic/image11.png")
+
   + 点击`Source`行，我们可以看到发送方的MAC地址。在终端中使用`ifconfig`命令获取主机的MAC地址，与抓包软件所抓取的MAC地址相吻合。
+  
+    #img2(src1: "pic/image12.png", src2: "pic/image13.png")
 
   + 点击`Type`行，我们可以看到版本号为IPV4。
+  
+    #img(src: "pic/image14.png")
 
   + 在抓包软件的显示界面中，我们还可以抓取到的主机的IP地址以及访问的目标网页的IP地址。
 
     - 抓取到主机的IP地址
 
+      #img(src: "pic/image15.png")
+
     - 抓取到目标网页的IP地址
+    
+      #img(src: "pic/image16.png")
 
   == 四. 分析地址ARP
 
   在协议筛选框中输入`arp`，按回车键，分组列表窗口中将只显示ARP报文。
+  
+  #img(src: "pic/image17.png")
 ]
 
 #experiment(title: "实验1-5 协议分析--IP协议")[
@@ -765,20 +811,32 @@
   + 终端输入wireshark启动wireshark，开始分组捕获。
 
   + 打开另一个终端，输入`ping www.baidu.com -s 4500 -c 1`，向百度发送一个大小为4500的icmp数据包。
+  
+    #img(src: "pic/image18.png")
 
   + 停止Wireshark。设置过滤方式为ip.dst=180.101.51.73，即目的地为百度的ip地址。Wireshark窗口中将会看到如图8-2所示的界面。
+  
+    #img(src: "pic/image19.png")
 
   下面对此分组进行简要分析：
 
   + 从捕捉到的信息可以看出IPV4协议的头部占20字节，全长为1500字节，那么数据部分的长度就为1480字节。
+  
+    #img(src: "pic/image20.png")
 
   + 从捕获到的分组，我们可以看出先后发送了3个数据包，第一个数据包。
+  
+    #img(src: "pic/image21.png")
 
     根据More fagements和Fragement offset可以判定这个数据包是分片数据包的一部分。
 
   + 第二个数据包
+  
+    #img(src: "pic/image22.png")
 
   + 第四个数据包，可以看到icmp数据包包含的ip分片。
+  
+    #img(src: "pic/image23.png")
 ]
 
 #experiment(title: "实验1-6 协议分析--ICMP协议")[
@@ -800,16 +858,26 @@
   + 输入wireshark命令启动Wireshark数据包嗅探器，在过滤显示窗口中输入`icmp`，开始wireshark分组捕获。
 
   + 输入`ping www.baidu.com -c 5`。其中`-c 5`指明应该返回5条ping信息。
+  
+    #img(src: "pic/image24.png")
 
   + 当Ping程序终止时，停止Wireshark分组捕获。
+
+    #img(src: "pic/image25.png")
 
   + 分组内容显示了ICMP的详细信息，观察ICMP分组，我们可以得到许多信息：
 
     - 我所在的主机的IP地址为：172.16.48.15
+    
+      #img(src: "pic/image26.png")
 
     - 查看ICMP请求分组，ICMP的type为：8，code为：0
+    
+      #img(src: "pic/image27.png")
 
     - 查看ICMP响应信息，type为：0，code为：0
+    
+      #img(src: "pic/image28.png")
 
   == 四. ICMP和Traceroute
 
@@ -818,6 +886,8 @@
   + 启动Wireshark数据包嗅探器，开始分组捕获。
 
   + 在终端中输入`traceroute www.baidu.com`。
+  
+    #img(src: "pic/image29.png")
 
   + 当Tracerouter程序终止时，停止分组捕获；
 
@@ -825,9 +895,15 @@
 
     - 查看ICMP echo分组，我们发现这个分组与前面使用ping命令的ICMP echo是一样的。其中，都有type、code、checksum、identifier、Seq number；
 
+      #img2(src1: "pic/image30.png", src2: "pic/image31.png")
+
     - 查看ICMP错误分组，它比ICMP echo分组包括的信息多，超时错误信息中，type为11，code为0；checksum备注为：unverified
+    
+      #img(src: "pic/image32.png")
 
     - 端口不可达的错误信息中还显示了NetBIOS Name Service相关信息：
+
+      #img(src: "pic/image33.png")
 ]
 
 #experiment(title: "实验1-7 路由器及其基本配置")[
@@ -850,24 +926,42 @@
   == 三. 路由器基本配置
 
   路由器配置示意图
+  
+  #img(src: "pic/image34.png")
 
   + 分别为PC0、PC1、PC2、PC3设置PC地址。
 
+    #img(src: "pic/image35.png")
+
   + 对路由器进行配置。
+  
+    #img(src: "pic/image36.png")
 
   + 启用路由器与交换机连接的接口，使路由器与交换机能够正常通信。
+  
+    #img(src: "pic/image37.png")
 
   == 四. 配置静态路由
 
   路由器静态路由配置拓扑图如下图所示
+  
+  #img(src: "pic/image38.png")
 
   + 安装HWIC-2T（两路由器连接需要其提供的serial port）。
 
+    #img(src: "pic/image39.png")
+
   + Router2配置
+  
+    #img2(src1: "pic/image40.png", src2: "pic/image41.png")
 
   + Router3配置（第7行修改为`interface Serial 0/1/0`），两个路由器配置完成连接成功则两局域网连通
+  
+    #img2(src1: "pic/image42.png", src2: "pic/image43.png")
 
   + 在做好上面的配置操作后，开始测试，以验证配置操作是否正确合理。在PC0电脑上运行Ping命令，可以Ping通，配置是合理的。
+  
+    #img(src: "pic/image44.png")
 ]
 
 #experiment(title: "实验1-8 路由器及其动态路由协议")[
@@ -887,42 +981,72 @@
   == 三. 路由器动态路由
 
   本次实验的网络拓扑结构图如下图所示。
+  
+  #img(src: "pic/image45.png")
 
   + Switch0 配置：
+  
+    #img(src: "pic/image46.png")
 
   + Switch1 配置：
+  
+    #img2(src1: "pic/image47.png", src2: "pic/image48.png")
 
   + Router0 配置：
+    
+    #img2(src1: "pic/image49.png", src2: "pic/image50.png")
 
     - 完成配置后，Router0的路由表：
+    
+      #img(src: "pic/image51.png")
 
   + Router1配置：
+    
+    #img(src: "pic/image52.png")
 
     - 完成配置后，Router1的路由器表：
+
+      #img(src: "pic/image53.png")
 
   + 主机IP配置
 
     - 配置PC0以太网0端口IP为192.168.100.10，PC1以太网0端口IP为192.168.100.12，PC2以太网0端口IP为192.168.200.11
+    
+      #img(src: "pic/image54.png")
 
   + 主机网关配置
 
     - 配置PC0网关192.168.100.1，PC2网关192.168.200.1
+    
+      #img(src: "pic/image55.png")
 
   + 完成配置操作后，进行网络连通性测试:
 
     - 在 PC0 的命令窗口中 Ping PC1 的 IP 地址，可以成功
+    
+      #img(src: "pic/image56.png")
 
     - Ping 交换机的 IP 地址，成功
+    
+      #img(src: "pic/image57.png")
 
     - Ping 自己网关的 IP 地址，成功
+    
+      #img(src: "pic/image58.png")
 
     - Ping 对方路由器的 IP 地址，成功
 
-    Ping 对方 PC 机的 IP 地址，成功
+      #img(src: "pic/image59.png")
+
+    - Ping 对方 PC 机的 IP 地址，成功
+    
+      #img(src: "pic/image60.png")
 
   == 四. 动态路由
 
   本次实验的网络拓扑结构图如下图所示。
+  
+  #img(src: "pic/image61.png")
 
   + 说明:
 
@@ -936,22 +1060,38 @@
     - Router1的以太网口Fa0/0的两个虚拟子接口分别为:Fa0/0.1  192.168.4.1 Fa0/0.2  192.168.5.1
 
   + Switch0配置
+  
+    #img2(src1: "pic/image62.png", src2: "pic/image63.png")
+    
+    #img2(src1: "pic/image64.png", src2: "pic/image65.png")
 
   + Switch1配置
+  
+    #img2(src1: "pic/image66.png", src2: "pic/image67.png")
 
   + Router0配置
+  
+    #img2(src1: "pic/image68.png", src2: "pic/image69.png")
 
   + Router1配置
+  
+    #img(src: "pic/image70.png")
 
   + 同上一实验，注意主机IP与网关的配置，若ping不通，优先检查网关是否配置正确。
 
   + 配置好 PC 机、交换机以及路由器后，进行网络连通性测试:
 
     - 在 PC0 的命令窗口中，ping 交换机，成功
+    
+      #img(src: "pic/image71.png")
 
     - 在 PC0 的命令窗口中，ping 对方路由器，成功
+    
+      #img(src: "pic/image72.png")
 
     - 在 PC0 的命令窗口中，ping 对方 PC 机，成功
+    
+      #img(src: "pic/image73.png")
 
   == 五. 静态路由与动态RIP路由的区别
 
@@ -992,34 +1132,64 @@
   == 三. DHCP配置
 
   + 本次实验的网络拓扑结构图如下图所示：
+  
+    #img(src: "pic/image74.png")
 
   + Router 0配置：
+  
+    #img2(src1: "pic/image75.png", src2: "pic/image76.png")
 
   + Router 1配置：
+  
+    #img2(src1: "pic/image77.png", src2: "pic/image78.png")
 
   + 完成配置操作后，查看PC0、PC1、PC2、PC3的IP地址，发现：
 
     - PC0、PC1获取的IP地址在192.168.3.2\~192.168.3.254之间
 
     - PC2、PC3获取的IP地址在192.168.4.2\~192.168.4.254之间
+    
+    #img2(src1: "pic/image79.png", src2: "pic/image80.png")
+    
+    #img2(src1: "pic/image81.png", src2: "pic/image82.png")
 
   == 四. 路由器动态路由2
 
   + 本次实验的网络拓扑结构图如下图所示：
+  
+    #img(src: "pic/image83.png")
 
   + Switch 0配置：
+  
+    #img2(src1: "pic/image84.png", src2: "pic/image85.png")
+
+    #img2(src1: "pic/image86.png", src2: "pic/image87.png")
 
   + Switch 1配置:
+  
+    #img2(src1: "pic/image88.png", src2: "pic/image89.png")
+
+    #img(src: "pic/image90.png")
 
   + Router 0配置:
+  
+    #img2(src1: "pic/image91.png", src2: "pic/image92.png")
 
   + 配置 Router1:
+  
+    #img2(src1: "pic/image93.png", src2: "pic/image94.png")
+    
+    #img2(src1: "pic/image95.png", src2: "pic/image96.png")
 
   + 配置好 PC 机、交换机以及路由器后，进行网络连通性测试:
 
     - 配置完成后进行连通性实验：在PC0的命令行方式下运行`ping 202.38.1.254`
+    
+      #img(src: "pic/image97.png")
 
     - 在PC1的命令行方式下运行`ping 192.168.4.11`
+
+      #img(src: "pic/image98.png")
 ]
 
 #experiment(title: "实验2-1 交换机部署及配置")[
@@ -1037,17 +1207,27 @@
   == 三. 启动IPMininet仿真网络
 
   右键打开终端首先输入`ovs-vswitchd --pidfile --detach`启动服务。
+  
+  #img(src: "pic/image99.png")
 
   实验时请按照如下图所示规划的网段进行实验。
+  
+  #img(src: "pic/image100.png")
 
   右键打开终端输入`sudo mn --controller=remote`，启动包含一个交换机和两个主机的最基本网络。
+  
+  #img(src: "pic/image101.png")
   
   == 四. 配置主机IP地址
 
   + 在启动Mininet后的终端内输入`xterm h1`，打开主机1的终端。
   
+    #img(src: "pic/image102.png")
+  
   + 在`h1`的终端内输入`sudo ifconfig`查看ip信息。可以看到此时eth0网卡的ip地址为`10.0.0.1`，子网掩码为`255.0.0.0`，不符合实验要求。
 
+    #img2(src1: "pic/image103.png", src2: "pic/image104.png")
+    
   + 执行如下命令，将主机1的eth0网卡的ip地址和子网掩码设置为实验要求。
 
   + 对主机2进行相同的配置，将其ip地址改为`10.0.0.3`，子网掩码改为`255.255.255.0`。
@@ -1058,17 +1238,27 @@
 
   + 执行`ovs-vsctl show`命令，查看交换机信息。
 
-    若如下图所示，即交换机的`fail_mode`为`secure`，表示交换机必须借助SDN中的控制器才能进行转发操作，我们需要在实验前先执行`ovs-vsctl del-fail-mode s1`命令，退出Secure模式。
+    若如下图所示，即交换机的`fail_mode`为`secure`，表示交换机必须借助SDN中的控制器才能进行转发操作，我们需要在实验前先执行`ovs-vsctl del-fail-mode s1`命令，退出Secure模式
+    
+    #img(src: "pic/image105.png")
 
   + 若如下图所示，表示交换机为普通交换机模式，请继续执行下面的操作步骤。
+  
+    #img(src: "pic/image106.png")
 
   == 六. 分析CAM表及数据流
 
   + 在主机1上执行`ping 10.0.0.3 -c 4`，测试网络连通性。
+  
+    #img(src: "pic/image107.png")
 
   + 主机2上执行`ping 10.0.0.2 -c 4`，测试网络连通性。
+  
+    #img(src: "pic/image108.png")
 
   + 在交换机上执行`ovs-appctl fdb/show s1`命令，看交换机中保存的CAM表。
+
+    #img(src: "pic/image109.png")
 ]
 
 #experiment(title: "实验2-2 路由器部署及配置")[
@@ -1089,17 +1279,29 @@
 
   右键打开终端首先输入`ovs-vswitchd --pidfile --detach`启动服务。
   
+  #img(src: "pic/image110.png")
+  
   实验时请按照如下图所示规划的网段进行实验。
+  
+  #img(src: "pic/image111.png")
   
   + 由于原生Mininet不支持网络层的路由器仿真，因此使用拓展过的IPMininet，需要我们通过代码创建自定义网络。
 
     - 进入/home/headless/ipmininet/ipmininet/examples文件夹，在此处打开终端
+    
+      #img(src: "pic/image112.png")
 
     - 输入`sudo gedit simple_router_network.py`创建新的网络拓扑文件，填入如下图所示的python代码
     
+      #img(src: "pic/image113.png")
+    
     - 终端中输入`sudo gedit __main__.py`打开main文件注册刚刚创建的网络拓扑，填入如下两图所示的代码，保存后退出
+    
+      #img2(src1: "pic/image114.png", src2: "pic/image115.png")
 
   + 退出到`/home/headless/ipmininet`文件夹，右键打开终端输入`sudo python3 -m ipmininet.examples --topo=simple_router_network`，启动包含一个路由器和两个主机的网络。
+
+    #img(src: "pic/image116.png")
 
   == 四. 配置主机IP地址
 
@@ -1107,27 +1309,43 @@
 
   + 在h1的终端内输入`sudo ifconfig`查看ip信息。可以看到此时eth0网卡的不sip地址和子网掩码符合实验要求。
   
+    #img(src: "pic/image117.png")
+  
   + 执行如下命令，将主机1的eth0网卡的ip地址和子网掩码设置为实验要求。
+  
+    #img(src: "pic/image118.png")
 
   + 输入`xterm h2`，打开h2的终端，输入`sudo ifconfig`查看ip信息。可以看到此时eth0网卡的ip地址不符合实验要求。
+  
+    #img(src: "pic/image119.png")
 
   + 执行如下命令，将主机2的eth0网卡的ip地址和子网掩码设置为实验要求。
+  
+    #img(src: "pic/image120.png")
 
   == 五. 配置路由器
 
   + 在mininet终端中输入`r1 route`，查看路由器1的路由表
+  
+    #img(src: "pic/image121.png")
 
   + 在mininet终端中输入`xterm r1`打开路由器1的终端，并在其终端上执行`ifconfig`命令，查看网卡端口信息。
   
     - 该路由器有两块网卡，eth0和eth1。
+    
+      #img(src: "pic/image122.png")
 
   + 修改两块网卡的ip地址。
 
     - 执行`ifconfig r1-eth0 192.168.0.1/24`命令，配置网卡eth0的IP地址为192.168.0.1/24
 
     - 执行`ifconfig r1-eth1 10.0.0.1/24`命令，配置网卡eth1的IP地址为10.0.0.1/24
+    
+    #img(src: "pic/image123.png")
 
   + 在mininet终端中再次执行`r1 route`命令，查看路由器1的路由表。
+  
+    #img(src: "pic/image124.png")
 
     - 127.0.0.0/24代表环回口路由，环回口习惯上被称为Loopback接口，是路由器上的一个逻辑、虚拟接口，任何主机中都会有。
 
@@ -1138,24 +1356,40 @@
   + 配置主机路由。
 
     - 查看主机1路由信息。主机1没有默认路由，从主机1出去的流量不能到达eth0的网关，即不能到达路由器1。
+    
+      #img(src: "pic/image125.png")
 
     - 执行如下命令，修改主机1的默认网关
 
+      #img(src: "pic/image126.png")
+
     - 查看修改后的路由信息，主机1的默认网关为网卡eth0的网关
 
+      #img(src: "pic/image127.png")
+
     - 查看主机2的路由信息。主机2没有默认路由，从主机2出去的流量不能达到eth1网关，即不能到达路由1
+    
+      #img(src: "pic/image128.png")
 
     - 执行如下命令，修改主机2的默认网关
+
+      #img(src: "pic/image129.png")
 
   == 六. 验证路由器功能
 
   + 在主机1上执行`ping 10.0.0.2`，主机2上执行`ping 192.168.0.2`，验证路由器路由功能。
 
     - 主机1Ping通主机2。
+    
+      #img(src: "pic/image130.png")
 
     - 主机2Ping通主机1
+    
+      #img(src: "pic/image131.png")
 
   + 打开路由器1的终端，在主机ping的过程中执行`tcpdump -i r1-eth0`命令，抓取路由器上的数据包。可以看到路由器将192.168.0.0/24网段的数据转发到10.0.0.0/24网段。
+  
+    #img(src: "pic/image132.png")
 ]
 
 #experiment(title: "实验2-3 RIP路由协议验证")[
@@ -1173,38 +1407,66 @@
   == 三. 启动IPMininet仿真网络
 
   右键打开终端首先输入`ovs-vswitchd --pidfile --detach`启动服务。
+  
+  #img(src: "pic/image133.png")
 
   实验时请按照如下图所示规划的网段进行实验。
+  
+  #img(src: "pic/image134.png")
 
   + 由于原生Mininet不支持网络层的路由器仿真，因此使用拓展过的IPMininet，需要我们通过代码创建自定义网络。
 
     - 进入/home/headless/ipmininet/ipmininet/examples文件夹，在此处打开终端。
+    
+      #img(src: "pic/image135.png")
 
     - 输入`sudo gedit simple_rip_network.py`创建新的网络拓扑文件，填入如下图所示的python代码。由于ipmininet并未提供rip协议的守护进程，因此本实验使用服务于IPV6协议RIPng协议。
+    
+      #img(src: "pic/image136.png")
 
     - 终端中输入`sudo gedit __main__.py`打开main文件注册刚刚创建的网络拓扑，填入如下两图所示的代码，保存后退出。
+    
+      #img2(src1: "pic/image137.png", src2: "pic/image138.png")
 
     - 退出到/home/headless/ipmininet文件夹，右键打开终端输入`sudo python3 -m ipmininet.examples --topo=simple_rip_network`，启动包含一个路由器和两个主机的网络
+    
+      #img(src: "pic/image139.png")
   
   == 四. 配置主机和路由器IP地址
 
-  + 在mininet终端上分别输入下列命令查看主机和路由器的ipv6地址。
+  在mininet终端上分别输入下列命令查看主机和路由器的ipv6地址。
+  
+  #img(src: "pic/image140.png")
+  
+  #img2(src1: "pic/image141.png", src2: "pic/image142.png")
+  
+  #img2(src1: "pic/image143.png", src2: "pic/image144.png")
 
   == 五. 配置主机和路由器地址
 
   + 由于在创建网络的时候就指定了使用RIP协议，因此本次实验无需手动配置RIP协议。在mininet终端上输入`r1 route -6`查看路由器的IPV6路由表。
   
     - 第一和第二条为直连路由，连接h1和r2；第三条则是由rip协议得到的路由条目，下一跳为r2，通往h2的网段
+    
+      #img(src: "pic/image145.png")
 
     - r2的路由表也是同理
+    
+      #img(src: "pic/image146.png")
   
   + 主机1与主机2互ping，验证网络连通性。
 
     - h1 ping h2：
+    
+      #img(src: "pic/image147.png")
 
     - h2 ping h1：
+    
+      #img(src: "pic/image148.png")
 
   + 在路由器1的终端上执行`tcpdump -i r1-eth0 -v`，抓取RIP交互信息数据包。可以看到rip的请求数据包和应答数据包。
+
+    #img(src: "pic/image149.png")
 ]
 
 #experiment(title: "实验2-4 OSPF路由协议验证")[
@@ -1224,16 +1486,28 @@
   == 三. 启动IPMininet仿真网络
 
   右键打开终端首先输入`ovs-vswitchd --pidfile --detach`启动服务。
+  
+  #img(src: "pic/image150.png")
 
   + 实验时请按照规划的网段进行实验。
+  
+    #img(src: "pic/image151.png")
 
   + 由于原生Mininet不支持网络层的路由器仿真，因此使用拓展过的IPMininet，需要我们通过代码创建自定义网络。进入/home/headless/ipmininet/ipmininet/examples文件夹，在此处打开终端。
+  
+    #img(src: "pic/image152.png")
 
   + 输入`sudo gedit simple_ospf4_network.py` 创建新的网络拓扑文件，填入如所示的python代码。这里在创建路由器的时候ipmininet默认使用ospf协议获取路由表，无需特殊声明。(可能现现需要手动下载gedit,下载指令：`sudo apt-get install gedit -y`。如果不用gedit也可以用vim打开编辑文件)
+  
+    #img(src: "pic/image153.png")
 
   + 终端中输入`sudo gedit main.py`打开main文件注册刚刚创建的网络拓扑，填入如下两图所示的代码，保存后退出。
+  
+    #img2(src1: "pic/image154.png", src2: "pic/image155.png")
 
-  执行`cd ../..`退出到第一个ipmininet文件夹，右键打开终端输入`sudo python3 -m ipmininet.examples --topo=simple_ospf4_network`，启动包含两个路由器和两个主机的网络。
+  + 执行`cd ../..`退出到第一个ipmininet文件夹，右键打开终端输入`sudo python3 -m ipmininet.examples --topo=simple_ospf4_network`，启动包含两个路由器和两个主机的网络。
+  
+    #img(src: "pic/image156.png")
 
   == 四. 配置主机IP地址
 
@@ -1241,11 +1515,15 @@
 
   + 在h1的终端内输入`sudo ifconfig`查看ip信息。可以看到此时eth0网卡的ip地址和子网掩码不符合实验要求。
   
+    #img(src: "pic/image157.png")
+  
   + 执行如下命令，将主机1的eth0网卡的ip地址和子网掩码设置为实验要求。
 
     - `sudo ifconfig h1-eth0 10.0.0.2`
 
   + 输入`xterm h2`，打开h2的终端，输入`sudo ifconfig`查看ip信息。可以看到此时eth0网卡的ip地址不符合实验要求。
+  
+    #img(src: "pic/image158.png")
 
   + 执行如下命令，将主机2的eth0网卡的ip地址和子网掩码设置为实验要求。
 
@@ -1254,6 +1532,8 @@
   == 五. 配置路由器
 
   + 在mininet终端中输入`xterm r1`打开路由器1的终端，并在其终端上执行`ifconfig`命令，查看网卡端口信息。该路由器有两块网卡，eth0和eth1。
+  
+    #img(src: "pic/image159.png")
 
   + 修改两块网卡的ip地址。
 
@@ -1261,19 +1541,27 @@
     
     - 执行`ifconfig r1-eth1 10.0.1.1/24`命令，配置网卡eth1的IP地址为10.0.1.1/24
     
+    #img(src: "pic/image160.png")
+    
   + 在mininet终端中输入`xterm r2`打开路由器2的终端，并在其终端上执行`ifconfig`命令，查看网卡端口信息。
+  
+    #img(src: "pic/image161.png")
   
   + 修改两块网卡的ip地址。
 
     - 执行`ifconfig r2-eth0 10.0.1.2/24`命令，配置网卡eth0的IP地址为10.0.1.2/24
     
     - 执行`ifconfig r2-eth1 10.0.2.1/24`命令，配置网卡eth1的IP地址为10.0.2.1/24
+    
+    #img(src: "pic/image162.png")
   
   + 配置主机路由。
 
     - 查看主机1路由信息。主机1没有默认路由，从主机1出去的流量不能到达eth0的网关，即不能到达路由器1。
 
     - 查看命令：`route -n`
+    
+      #img(src: "pic/image163.png")
 
     - 执行如下命令，修改主机1的默认网关
 
@@ -1283,9 +1571,13 @@
 
     - 再次执行：`route -n`
     
+      #img(src: "pic/image164.png")
+    
     - 查看主机2的路由信息。主机2没有默认路由，从主机2出去的流量不能达到eth1网关，即不能到达路由1
 
     - 查看命令：`route -n`
+    
+      #img(src: "pic/image165.png")
 
     - 同样的，我们修改路由信息：`sudo route add default gw 10.0.2.1`
     
@@ -1293,11 +1585,15 @@
 
     - 查看指令：`route -n`
     
+      #img(src: "pic/image166.png")
+    
   == 六. 配置路由器OSPF协议
 
   + 在mininet终端上执行r1 route查看路由器1的路由表，可以发现虽然网卡的ip地址更新了，但是却没有通向主机2网络的路由条目，这需要我们手动更新OSPF协议中路由器所连接的网络。
   
     - 执行指令：`r1 route`
+    
+      #img(src: "pic/image167.png")
     
   + 打开路由器1的终端，输入`telnet localhost ospfd`，使用telnet工具连ospf 进程，输入默认密码：zebra。
   
@@ -1312,6 +1608,8 @@
   + 输入下列命令查看ospf信息，可以发现network只有刚创建网络时的ip地址，需要我们手动添加更新后的。
 
     - `show running-config`
+    
+      #img(src: "pic/image168.png")
 
   + 依次输入下列三条指令，添加新的network。
 
@@ -1320,10 +1618,16 @@
     - `network 10.0.1.0/24 area 0.0.0.0`
 
     - `write`
+    
+    #img(src: "pic/image169.png")
 
   + 再次查看ospf信息，可以发现已经添加成功。查看指令：`show running-config`
+  
+    #img(src: "pic/image170.png")
 
   + 同样的方式，更新路由器2的网络信息。即在r2的终端，重复上述r1的操作。
+  
+    #img(src: "pic/image171.png")
 
   == 七. 验证OSPF协议
 
@@ -1331,9 +1635,13 @@
 
     - 指令：`ping 10.0.2.2`
     
+      #img(src: "pic/image172.png")
+    
   + 在mininet终端上再次查看r1和r2的路由表，发现已经有了由ospf发现的目标网络，标志UG表示连接的网络是可达的且邻接路由器是网关路由器。
 
     - 执行:`r1 route`,`r2 route`
+    
+      #img(src: "pic/image173.png")
     
   + 新开一个路由器1终端，登录ospf进程后，输入`show ip ospf route`后同样可以看到通过`ospf`协议获取的路由表。
   
@@ -1346,8 +1654,12 @@
     - `router ospf`
 
     - `show ip ospf route`
+    
+    #img(src: "pic/image174.png")
 
   + 再新开一个r1终端，输入`tcpdump -i r1-eth0 proto ospf -v`可以看到路由器收到的ospf协议包
+  
+    #img(src: "pic/image175.png")
 ]
 
 #experiment(title: "实验2-5 BGP路由协议验证")[
@@ -1367,28 +1679,42 @@
   == 三. 启动IPMininet仿真网络
 
   右键打开终端首先输入`ovs-vswitchd --pidfile --detach`启动服务。
+  
+  #img(src: "pic/image176.png")
 
   实验时请按照如下图规划的网段进行实验。
+  
+  #img(src: "pic/image177.png")
 
   + 由于原生Mininet不支持网络层的路由器仿真，因此使用拓展过的IPMininet，需要我们通过代码创建自定义网络。进入/home/headless/ipmininet/ipmininet/examples文件夹，在此处打开终端。
   
     - 输入`sudo gedit simple_bgp4_network.py`创建新的网络拓扑文件，填入如下图所示的python代码。这里在创建路由器
+    
+      #img(src: "pic/image178.png")
 
     - 终端中输入`sudo gedit __main__.py`打开main文件注册刚刚创建的网络拓扑，填入如下两图所示的代码，保存后退出
+    
+      #img2(src1: "pic/image179.png", src2: "pic/image180.png")
 
   + 退出到第一层ipmininet文件夹，右键打开终端输入`sudo python3 -m ipmininet.examples --topo=simple_bgp4_network`，启动包含两个路由器和两个主机的网络。
+  
+    #img(src: "pic/image181.png")
   
   == 四. 配置主机IP地址
 
   + 在启动Mininet后的终端内输入`xterm h1`，打开主机1的终端。
 
   + 在h1的终端内输入`sudo ifconfig`查看ip信息。可以看到此时eth0网卡的ip地址和子网掩码不符合实验要求。
+  
+    #img(src: "pic/image182.png")
 
   + 执行如下命令，将主机1的eth0网卡的ip地址和子网掩码设置为实验要求。
   
     - 执行指令：`sudo ifconfig h1-eth0 10.0.0.2`
 
   + 输入`xterm h2`，打开h2的终端，输入`ifconfig`查看ip信息。可以看到此时eth0网卡的ip地址不符合实验要求。
+  
+    #img(src: "pic/image183.png")
   
   + 执行如下命令，将主机2的eth0网卡的ip地址和子网掩码设置为实验要求。
 
@@ -1397,16 +1723,22 @@
   == 五. 配置路由器
 
   + 在mininet终端中输入`xterm r1`打开路由器1的终端，并在其终端上执行`ifconfig`命令，查看网卡端口信息。该路由器有两块网卡，eth0和eth1。
+  
+    #img(src: "pic/image184.png")
 
   + 修改两块网卡的ip地址。
 
     - 执行`ifconfig r1-eth0 10.0.0.1/24`命令，配置网卡eth0的IP地址为`10.0.0.1/24` // TODO: Here the '`' character is not united with contents above. Consider removing it or whatever else???
 
     - 执行`ifconfig r1-eth1 10.0.5.1/24`命令，配置网卡eth1的IP地址为`10.0.5.1/24`
+    
+    #img(src: "pic/image185.png")
 
   + 配置主机路由。
 
     - 查看主机1路由信息。执行`route-n`。如下图所示，主机1没有默认路由，从主机1出去的流量不能到达eth0的网关，即不能到达路由
+    
+      #img(src: "pic/image186.png")
 
     - 执行如下命令，修改主机1的默认网关
 
@@ -1416,7 +1748,11 @@
 
     - 查看命令：`route -n`
     
+      #img(src: "pic/image187.png")
+    
     - 同理查看主机2的路由信息。主机2没有默认路由，从主机2出去的流量不能达到eth1网关，即不能到达路由1
+    
+      #img(src: "pic/image188.png")
 
     - 执行如下命令，修改主机2的默认网关。
 
@@ -1425,12 +1761,18 @@
     - 查看修改后的路由信息，主机2的默认网关为网卡eth0的网关。
 
     - 查看指令：`route -n`
+
+      #img(src: "pic/image189.png")
     
   == 六. 配置路由器BGP协议
 
   + 在mininet终端上执行`r1 route`查看路由器1的路由表，可以发现虽然网卡的ip地址更新了，但是却没有通向主机2网络的路由条目，这需要我们手动更新BGP协议中路由器所连接的网络。
+
+    #img(src: "pic/image190.png")
   
   + 打开路由器1的终端，输入`telnet localhost bgpd`，使用telnet工具连接bgp进程，输入默认密码：zebra。
+  
+    #img(src: "pic/image191.png")
   
   + 依次输入下列两条指令，进入bgp的配置模式。
 
@@ -1439,6 +1781,8 @@
     - `Configure terminal`
   
   + 输入`router bgp 100`，设置自身为的自治域号为100。
+
+    #img(src: "pic/image192.png")
   
   + 依次输入下列四条指令，配置BGP协议。
 
@@ -1450,17 +1794,31 @@
 
     - `write`
     
+    #img(src: "pic/image193.png")
+    
   + 输入两次quit后退出配置模式，再输入`show ip bgp summary`查看bgp信息，可以发现已经添加成功，但状态为active,表示路由器正在积极寻找邻居
   
+    #img(src: "pic/image194.png")
+  
   + 同样的方式，更新路由器2的bgp信息。
+  
+    #img(src: "pic/image195.png")
 
   + 输入`show ip bgp summary`查看bgp信息，可以发现已经添加成功，但这时的状态已经不为active，表示路由器已经找到邻居，但此时PfxRcd字段为0，表示暂未得知网络前缀号。
   
+    #img(src: "pic/image196.png")
+  
   + 在r1终端中再次进入bgp配置模式，输入`network 10.0.0.0/24`，声明r1负责的AS区域的网络前缀为10.0.0.0/2
   
+    #img(src: "pic/image197.png")
+  
   + 在r2终端中再次进入bgp配置模式，输入`network 192.168.0.0/24`，声明r2负责的AS区域的网络前缀为192.168.0.0/24
+
+    #img(src: "pic/image198.png")
   
   + 在r1的终端，输入`show ip bgp summary`查看bgp信息，可以发现已经添加成功，但这时PfxRcd字段为1，表示得知了邻居的一个网络前缀号。
+  
+    #img(src: "pic/image199.png")
   
   == 七. 验证BGP协议
   
@@ -1468,7 +1826,11 @@
 
     - 指令：`ping 192.168.0.2`
     
+      #img(src: "pic/image200.png")
+    
   + 在mininet终端上再次查看r1和r2的路由表，发现已经有了由bgp发现的目标网络，标志UG表示连接的网络是可达的且邻接路由器是网关路由器。
+
+    #img(src: "pic/image201.png")
 ]
 
 #experiment(title: "实验2-6 VLAN及VLAN间路由选择")[
@@ -1487,8 +1849,12 @@
   == 三. 启动IPMininet仿真网络
 
   + 实验时请按照下图规划的网段进行实验。
+  
+    #img(src: "pic/image202.png")
 
   + 右键打开终端首先输入`ovs-vswitchd --pidfile --detach`启动服务，然后输入`sudo mn --topo=single,3 --controller=remote`，启动包含一个交换机和三个主机的基本网络。
+
+    #img2(src1: "pic/image203.png", src2: "pic/image204.png")
   
   == 四. 配置主机IP地址
 
@@ -1497,6 +1863,8 @@
   + 在h1终端输入`sudo ifconfig`查看ip信息。可看到此时eth0网卡的ip地址为10.0.0.1，子网掩码为255.0.0.0，不符合要求。
   
   + 执行如下命令，修改子网掩码。
+  
+    #img2(src1: "pic/image205.png", src2: "pic/image206.png")
 
   + 同样地，对h2和h3的子网掩码进行修改。
 
@@ -1507,12 +1875,18 @@
   + 执行`ovs-vsctl show`命令，查看交换机信息。
   
     - 若交换机的fail_mode为secure，表示交换机必须借助SDN中的控制器才能进行转发操作，我们需要在实验前先执行`ovs-vsctl del-fail-mode s1`命令，退出Secure模式。
+    
+      #img(src: "pic/image207.png")
   
     - 若如下所示，表示交换机为普通交换机模式，请继续执行下面的操作步骤。
+    
+      #img(src: "pic/image208.png")
 
   == 六. 配置VLAN
 
   + 查看主机在交换机上的连接端口。执行`ovs-appctl fdb/show s1`命令，查看交换机保存的端口对应的MAC表。
+  
+    #img(src: "pic/image209.png")
   
     - port是对应交换机上的网卡。
     - VLAN是该端口上的VLAN值。
@@ -1520,6 +1894,10 @@
     - Age是时间。
     
   + 登录主机终端，执行`ifconfig`命令，分别查看主机1，主机2和主机3的MAC地址。
+  
+    #img2(src1: "pic/image210.png", src2: "pic/image211.png")
+    
+    #img(src: "pic/image212.png")
   
     - 根据MAC地址对应可知，port2连接主机2，port3连接主机3，port1连接主机1
 
@@ -1529,9 +1907,13 @@
     - #raw("ovs-vsctl set port s1-eth" + str(i) + " tag=" + str(tag))
     ]
     
+    #img(src: "pic/image213.png")
+    
   + 执行`ovs-appctl fdb/show s1`，查看端口信息。其中port1和port2的VLAN ID是100，port3的VLAN是200。
   
   + 执行`ovs-vsctl show`，查看基本交换机信息。
+  
+    #img(src: "pic/image214.png")
   
     - 其中eht1和eth2两个端口上有Tag标签100，eth3上有Tag标签200。所有从主机进入交换机的s1的数据帧都会在port上打上相应的标签。
 
@@ -1539,9 +1921,13 @@
 
   + 打开主机1的终端，用主机1ping主机2
   
+    #img(src: "pic/image215.png")
+  
     - 主机1能够ping通主机2，因为两个主机处于同一个VLAN中。
 
   + 打开主机1的终端，用主机1ping主机3
+  
+    #img(src: "pic/image216.png")
 
     - 主机1ping不通主机3，因为两个主机处于不同的VLAN中。
 
